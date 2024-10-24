@@ -5,6 +5,8 @@ import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 import time
 import os
+import nltk
+from nltk.data import find
 
 # Obtener la ruta del directorio actual del script
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -15,6 +17,12 @@ file_path = os.path.join(script_dir, 'archive', 'test_data.csv')
 df = pd.read_csv(file_path)
 pd.set_option('display.max_columns', None)  # Muestra todas las columnas
 pd.set_option('display.width', 0)  # Ajuste automático del ancho según el contenido
+
+# Se asegura de contar con el recurso 'vader_lexicon'
+try:
+    find('sentiment/vader_lexicon.zip')
+except LookupError:
+    nltk.download('vader_lexicon')
 
 # Inicializar el analizador de sentimientos de VADER
 sia = SentimentIntensityAnalyzer()
