@@ -2,3 +2,6 @@ pandas
 nltk
 numpy
 scikit-fuzzy
+networkx
+packaging
+scipy
