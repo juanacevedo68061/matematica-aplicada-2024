@@ -4,9 +4,14 @@ import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 import time
+import os
 
-# Cargar el dataset desde el archivo CSV
-file_path = r'C:\Users\juana\OneDrive\Escritorio\Matematica Aplicada\Proyecto final\archive\test_data.csv'
+# Obtener la ruta del directorio actual del script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Cargar el dataset desde el archivo CSV usando ruta relativa
+file_path = os.path.join(script_dir, 'archive', 'test_data.csv')
+
 df = pd.read_csv(file_path)
 pd.set_option('display.max_columns', None)  # Muestra todas las columnas
 pd.set_option('display.width', 0)  # Ajuste automático del ancho según el contenido
@@ -136,10 +141,9 @@ df['SentimentSet'] = df['SentimentScore'].apply(classify_sentiment)
 # Crear un DataFrame con los resultados
 benchmarks_df = pd.DataFrame(resultados)
 
-# Guardar el DataFrame en un nuevo archivo CSV
-output_file_path = r'C:\Users\juana\OneDrive\Escritorio\Matematica Aplicada\Proyecto final\archive\benchmarks.csv'
+# Guardar el DataFrame en un nuevo archivo CSV usando ruta relativa
+output_file_path = os.path.join(script_dir, 'archive', 'benchmarks.csv')
 benchmarks_df.to_csv(output_file_path, index=False)
-
 
 # Contar la cantidad de positivos, negativos y neutrales
 count_positive = (df['SentimentSet'] == 'Positivo').sum()
