@@ -18,6 +18,22 @@ df = pd.read_csv(file_path)
 pd.set_option('display.max_columns', None)  # Muestra todas las columnas
 pd.set_option('display.width', 0)  # Ajuste automático del ancho según el contenido
 
+def limpiar_texto(sentence):
+    palabras_limpias = []
+    
+    for palabra in sentence.split():
+        # Verificar si es una palabra de más de una letra
+        if len(palabra) > 1:
+            # Verificar si todas las letras de la palabra son iguales
+            if len(set(palabra)) > 1:  # set elimina duplicados, si len es 1 significa que todas son iguales
+                palabras_limpias.append(palabra)
+    
+    # Unir las palabras limpias en una sola cadena
+    return ' '.join(palabras_limpias)
+
+# Aplicar la función de limpieza al dataset
+df['sentence'] = df['sentence'].apply(limpiar_texto)
+
 # Se asegura de contar con el recurso 'vader_lexicon'
 try:
     find('sentiment/vader_lexicon.zip')
@@ -69,7 +85,7 @@ tweet_pos = ctrl.Antecedent(np.arange(min_pos, max_pos + 0.1, 0.1), 'TweetPos')
 tweet_neg = ctrl.Antecedent(np.arange(min_neg, max_neg + 0.1, 0.1), 'TweetNeg')  
 
 # Crear la variable de salida
-output = ctrl.Consequent(np.arange(0, 10.1, 0.1), 'SentimentScore')  # Valores van de 0 a 10 a paso de 0.1
+output = ctrl.Consequent(np.arange(0, 10.1, 0.1), 'SentimentScore', defuzzify_method='centroid') # Valores van de 0 a 10 a paso de 0.1
 
 # Definir las funciones de pertenencia para TweetPos
 tweet_pos['Bajo'] = fuzz.trimf(tweet_pos.universe, [min_pos, min_pos, mid_pos])  # Bajo (13)
